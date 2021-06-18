@@ -1,0 +1,131 @@
+<h2>Pedidos</h2>
+<div class="card">
+  <div class="card-content">
+    <div class="row">
+      <div class="col-4">
+        <form #orderForm="ngForm" (ngSubmit)="onSubmitOrder(orderForm)" class="form-signin">
+          <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="orderService.selectedOrder._id">
+          <div class="row">
+            <label>Pedido: </label>
+            <input type="text" name="content" #name="ngModel" [(ngModel)]="orderService.selectedOrder.content"
+              placeholder="Porção de batata-frita" class="form-control" required>
+          </div>
+          <div class="row">
+            <label>Quantidade: </label>
+            <input type="number" name="amount" #name="ngModel" [(ngModel)]="orderService.selectedOrder.amount"
+              class="form-control" required>
+          </div>
+          <div class="row">
+            <div class="col-12 p-0 py-2">
+              <button class="btn btn-primary" type="button" (click)="resetOrderForm(orderForm)">Resetar</button>
+              <button class="btn btn-primary mx-2" type="submit" [disabled]="!orderForm.valid">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-8">
+        <table class="table w-100">
+          <thead>
+            <tr>
+              <th scope="col">Quantidade</th>
+              <th scope="col">Pedido</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orderService.orders">
+              <td>{{order.amount}}</td>
+              <td>{{order.content}}</td>
+              <td>
+                <a class="btn btn-secondary" (click)="onEditOrder(order)">
+                  Editar
+                </a>
+                <a class="btn btn-secondary mx-2" (click)="onDeleteOrder(order._id, orderForm)">
+                  Deletar
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<h2 class="mt-5">Usuários</h2>
+<div class="card">
+  <div class="card-content">
+    <div class="row mt-2">
+      <div class="col-1"></div>
+      <div class="col-9">
+        <input type="text" name="emailSearch" #name="ngModel" [(ngModel)]="emailSearch" placeholder="Pesquisar email..."
+          class="form-control">
+      </div>
+      <div class="col-2">
+        <button class="btn btn-primary" type="button" (click)="searchEmail()">Pesquisar</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <form #userForm="ngForm" (ngSubmit)="onSubmitUser(userForm)" class="form-signin">
+          <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="authService.selectedUser._id">
+          <div class="row">
+            <label>Nome: </label>
+            <input type="text" name="name" #name="ngModel" [(ngModel)]="authService.selectedUser.name"
+              class="form-control" required>
+          </div>
+          <div class="row">
+            <label>Email: </label>
+            <input name="email" type="email" #name="ngModel" [(ngModel)]="authService.selectedUser.email"
+              class="form-control" required>
+          </div>
+          <div class="row">
+            <label>Senha: </label>
+            <input name="password" type="password" #name="ngModel" [(ngModel)]="authService.selectedUser.password"
+              class="form-control" required>
+          </div>
+          <div class="row">
+            <div class="col-12 p-0 py-2">
+              <button class="btn btn-primary" type="button" (click)="resetUserForm(userForm)">Resetar</button>
+              <button class="btn btn-primary mx-2" type="submit" [disabled]="!userForm.valid">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-8">
+        <div *ngIf="userData">
+          <mat-table [dataSource]="userData.users">
+            <mat-header-row *matHeaderRowDef="userColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: userColumns"></mat-row>
+
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.email}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="createdAt">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Data de criação</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                {{ row.createdAt }}
+                <a class="btn btn-secondary mx-2" (click)="onEditUser(row)">
+                  Editar
+                </a>
+                <a class="btn btn-secondary mx-2" (click)="onDeleteUser(row._id, userForm)">
+                  Deletar
+                </a>
+              </mat-cell>
+            </ng-container>
+          </mat-table>
+          <mat-paginator [length]="userData.meta.totalItems" [pageSize]="userData.meta.itemsPerPage"
+            [pageSizeOptions]="[5,10,25,100]" (page)="pageEvent = $event; onPaginateChange($event);"
+            showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

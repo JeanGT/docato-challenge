@@ -1,0 +1,11 @@
+<form #orderForm="ngForm" (ngSubmit)="onSubmit(orderForm)" class="form-signin">
+  <h1 class="h3 mb-3 fw-normal">Cadastrar</h1>
+
+  <input name="name" type="text" #name="ngModel" [(ngModel)]="authService.selectedUser.name" class="form-control" placeholder="Nome" required>
+
+  <input name="email" type="email" #name="ngModel" [(ngModel)]="authService.selectedUser.email" class="form-control" placeholder="Email" required>
+
+  <input name="password" type="password"#name="ngModel" [(ngModel)]="authService.selectedUser.password" class="form-control" placeholder="Senha" required>
+
+  <button class="w-100 btn btn-lg btn-primary" type="submit" [disabled]="!orderForm.valid">Enviar</button>
+</form>
